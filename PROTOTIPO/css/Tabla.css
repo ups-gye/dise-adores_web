@@ -44,86 +44,28 @@ body {
     background-color: #45a049;
 }
 
-.menu-toggle {
-    font-size: 24px;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-.welcome-section {
-    padding: 40px;
-    background-color: white;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.game-container {
     text-align: center;
+    padding: 20px;
 }
-
-.welcome-section h1 {
-    color: #333;
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
-
-.welcome-section p {
-    color: #555;
-    line-height: 1.6;
-    font-size: 1.2em;
-    margin-bottom: 20px;
-    text-align: justify;
-    text-justify: inter-word;
-}
-
-
-.game-container img {
-    margin-top: 20px;
-    max-width: 100%;
-    height: auto;
-}
-
-.game-footer {
-    text-align: center;
-    padding-top: 20px;
-}
-
-.game-footer button {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.game-footer button:hover {
-    background-color: #c9302c;
-}
-
 
 .game-container h1 {
     text-align: center;
-    font-family: 'Times New Roman', serif; /* Fuente  */
-    color: #0c0c0c; /* Color blanco para visibilidad */
-    font-size: 35px; /* Tamaño grande */
-    text-shadow: 2px 2px #e2e1e1; /* Sombra para profundidad */
-  }
-  
-table {
-    width: 60%; /* Reduce el ancho de la tabla */
-    margin: 0 auto; /* Centra la tabla */
-    border-collapse: collapse;
+    font-family: 'Times New Roman', serif;
+    color: #0c0c0c;
+    font-size: 35px;
+    text-shadow: 2px 2px #e2e1e1;
+}
+
+.table-responsive {
+    max-width: 80%;
+    margin: 0 auto;
     margin-top: 20px;
 }
 
-th, td {
-    border: 2px solid black; /* Bordes más notables */
-    padding: 8px;
-    text-align: left;
+.table {
+    width: 100%;
+    margin-top: 20px;
 }
 
-th {
-    background-color: #ff0000;
-    color: white;
-}
+
