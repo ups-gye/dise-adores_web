@@ -44,75 +44,55 @@ body {
     background-color: #45a049;
 }
 
-.menu-toggle {
-    font-size: 24px;
-    background: none;
+.game-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.video-player {
+    margin-bottom: 20px;
+}
+
+.video-thumbnails-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#prev-btn, #next-btn {
+    background-color: #ddd;
     border: none;
-    color: white;
+    padding: 10px;
     cursor: pointer;
 }
 
-.welcome-section {
-    padding: 40px;
-    background-color: white;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+#prev-btn:hover, #next-btn:hover {
+    background-color: #ccc;
 }
 
-.welcome-section h1 {
-    color: #333;
-    font-size: 2.5em;
-    margin-bottom: 20px;
+.video-thumbnails {
+    display: flex;
+    overflow-x: auto;
+    max-width: 70%;
 }
 
-.welcome-section p {
-    color: #555;
-    line-height: 1.6;
-    font-size: 1.2em;
-    margin-bottom: 20px;
-    text-align: justify;
-    text-justify: inter-word;
-}
-
-
-.game-container img {
-    margin-top: 20px;
-    max-width: 100%;
+.video-thumbnails img {
+    width: 150px;
     height: auto;
-}
-
-.game-footer {
-    text-align: center;
-    padding-top: 20px;
-}
-
-.game-footer button {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 18px;
+    margin: 10px;
     cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.3s;
 }
 
-.game-footer button:hover {
-    background-color: #c9302c;
-}
-
-.Ims img {
-    display: block;
-    margin: auto; /* Centra la imagen */
-    width: 50%; /* Ajusta el porcentaje según tus necesidades */
-    height: auto; /* Mantiene la proporción de la imagen */
+.video-thumbnails img:hover {
+    border: 2px solid #45a049;
 }
 
 .game-container h1 {
     text-align: center;
-    font-family: 'Times New Roman', serif; /* Fuente  */
-    color: #0c0c0c; /* Color blanco para visibilidad */
-    font-size: 48px; /* Tamaño grande */
-    text-shadow: 2px 2px #e2e1e1; /* Sombra para profundidad */
-  }
-  
+    font-family: 'Times New Roman', serif;
+    color: #0c0c0c;
+    font-size: 48px;
+    text-shadow: 2px 2px #e2e1e1;
+}
