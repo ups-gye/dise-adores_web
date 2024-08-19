@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡SALTOS DE CIENCIAS!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        #gameContainer {
+            background-image: url('img/fond.jpg');
+            background-size: cover;
+            width: 800px;
+            height: 600px;
+            margin: 20px auto;
+            position: relative;
+            border: 2px solid #000;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        }
+        #questionContainer {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            width: 60%;
+            background-image: url('img/33.jpg');
+            background-size: cover;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-out;
+        }
+        .option {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option:hover {
+            background-color: #0056b3;
+        }
+        #lives {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+        }
+        #progress {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        #boy {
+            position: absolute;
+            bottom: 60px;
+            left: 40px;
+            width: 100px;
+            transition: bottom 0.5s ease-in-out, left 0.5s ease-in-out;
+        }
+        #cat {
+            position: absolute;
+            bottom: 80px;
+            right: 100px;
+            width: 100px;
+            animation: bounce 2s infinite;
+        }
+        #stones {
+            position: absolute;
+            bottom: 0;
+            left: 100px;
+            width: 600px;
+            height: 100px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .stone {
+            width: 60px;
+            height: 60px;
+            background-image: url('img/piedra.webp');
+            background-size: cover;
+            border-radius: 50%;
+            position: relative;
+        }
+        #jumpButton {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* El botón está oculto hasta que se responda correctamente */
+            font-size: 18px;
+        }
+        #jumpButton:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lives-animation {
+            animation: blink 0.3s alternate infinite;
+        }
+
+        @keyframes blink {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="lives">❤️❤️❤️</div>
+        <div id="progress">Pregunta 1 de 3</div>
+        <div id="questionContainer">
+            <div id="question">Pregunta 1: ¿Cuál es la capital de Francia?</div>
+            <div class="option" onclick="checkAnswer(0)">Madrid</div>
+            <div class="option" onclick="checkAnswer(1)">París</div>
+            <div class="option" onclick="checkAnswer(0)">Berlín</div>
+        </div>
+        <img id="boy" src="img/niño.png" alt="Niño">
+        <img id="cat" src="img/gat.webp" alt="Gato">
+        <div id="stones">
+            <div class="stone"></div>
+            <div class="stone"></div>
+            <div class="stone"></div>
+            <div class="stone"></div>
+        </div>
+        <button id="jumpButton" onclick="jump()">Saltar</button>
+    </div>
+
+    <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop autoplay></audio> <!-- Aquí añades el sonido de fondo -->
+    
+    <script>
+        let currentQuestion = 0;
+        let lives = 3;
+        let position = 0;
+
+        const questions = [
+            { question: "¿Cuál es la capital de Francia?", options: ["Madrid", "París", "Berlín"], correct: 1 },
+            { question: "¿Cuál es la fórmula del agua?", options: ["CO2", "NaCl", "H2O"], correct: 2 },
+            { question: "¿Cuántos planetas hay en el sistema solar?", options: ["8", "9", "10"], correct: 0 }
+        ];
+
+        function loadQuestion() {
+            if (currentQuestion < questions.length) {
+                const q = questions[currentQuestion];
+                document.getElementById('question').innerText = q.question;
+                const options = document.querySelectorAll('.option');
+                for (let i = 0; i < options.length; i++) {
+                    options[i].innerText = q.options[i];
+                    options[i].onclick = () => checkAnswer(i);
+                }
+                document.getElementById('jumpButton').style.display = 'none'; // Oculta el botón al cargar una nueva pregunta
+                document.getElementById('progress').innerText = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+            } else {
+                alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
+                showVictoryAnimation();
+            }
+        }
+
+        function checkAnswer(selected) {
+            if (selected === questions[currentQuestion].correct) {
+                document.getElementById('jumpButton').style.display = 'block'; // Muestra el botón cuando la respuesta es correcta
+            } else {
+                lives--;
+                updateLives();
+                if (lives === 0) {
+                    alert("¡Has perdido todas tus vidas!");
+                    resetGame();
+                } else {
+                    alert("Respuesta incorrecta. Vuelve a intentarlo.");
+                }
+            }
+        }
+
+        function jump() {
+            position++;
+            if (position < 4) {
+                document.getElementById('boy').style.bottom = '140px'; // Salto hacia arriba
+                setTimeout(() => {
+                    document.getElementById('boy').style.left = 40 + 200 * position + 'px';
+                    document.getElementById('boy').style.bottom = '60px'; // Vuelve al nivel de las piedras
+                }, 300);
+            } else {
+                alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
+                showVictoryAnimation();
+            }
+            document.getElementById('jumpButton').style.display = 'none'; // Oculta el botón de nuevo hasta la siguiente pregunta correcta
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function updateLives() {
+            const livesContainer = document.getElementById('lives');
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < lives; i++) {
+                livesContainer.innerHTML += '❤️';
+            }
+            if (lives > 0 && lives < 3) {
+                livesContainer.classList.add('lives-animation');
+                setTimeout(() => livesContainer.classList.remove('lives-animation'), 1000);
+            }
+        }
+
+        function showVictoryAnimation() {
+            document.getElementById('boy').style.left = '660px';
+            document.getElementById('boy').style.bottom = '80px';
+            setTimeout(() => {
+                alert("¡Felicidades! ¡Has ganado el juego!");
+                resetGame();
+            }, 1000);
+        }
+
+        function resetGame() {
+            currentQuestion = 0;
+            lives = 3;
+            position = 0;
+            document.getElementById('boy').style.left = '40px';
+            document.getElementById('boy').style.bottom = '60px';
+            updateLives();
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
