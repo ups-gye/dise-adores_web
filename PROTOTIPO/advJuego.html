@@ -22,19 +22,26 @@
             border: 2px solid #000;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
         }
-        #questionContainer {
+        #questionContainer, #boy, #cat, #stones, #lives, #progress, #jumpButton {
+            display: none; /* Ocultamos todo hasta que se inicie el juego */
+        }
+        #startButton {
             position: absolute;
-            top: 10%;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            width: 60%;
-            background-image: url('img/33.jpg');
-            background-size: cover;
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-out;
+            transition: background-color 0.3s ease;
+        }
+        #startButton:hover {
+            background-color: #218838;
         }
         .option {
             display: inline-block;
@@ -104,7 +111,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: none; /* El botón está oculto hasta que se responda correctamente */
+            display: none;
             font-size: 18px;
         }
         #jumpButton:disabled {
@@ -158,10 +165,11 @@
             <div class="stone"></div>
         </div>
         <button id="jumpButton" onclick="jump()">Saltar</button>
+        <button id="startButton" onclick="startGame()">Iniciar el Juego</button> <!-- Botón para iniciar el juego -->
     </div>
 
-    <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop autoplay></audio> <!-- Aquí añades el sonido de fondo -->
-    
+    <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop></audio> <!-- Aquí añades el sonido de fondo -->
+
     <script>
         let currentQuestion = 0;
         let lives = 3;
@@ -172,6 +180,26 @@
             { question: "¿Cuál es la fórmula del agua?", options: ["CO2", "NaCl", "H2O"], correct: 2 },
             { question: "¿Cuántos planetas hay en el sistema solar?", options: ["8", "9", "10"], correct: 0 }
         ];
+
+        function startGame() {
+            // Reproducir música de fondo
+            const audio = document.getElementById('backgroundMusic');
+            audio.play().catch(error => {
+                console.log("El navegador bloqueó la reproducción automática de audio.");
+            });
+
+            // Mostrar todos los elementos del juego
+            document.getElementById('startButton').style.display = 'none'; // Oculta el botón de inicio
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('boy').style.display = 'block';
+            document.getElementById('cat').style.display = 'block';
+            document.getElementById('stones').style.display = 'flex';
+            document.getElementById('lives').style.display = 'block';
+            document.getElementById('progress').style.display = 'block';
+
+            // Cargar la primera pregunta
+            loadQuestion();
+        }
 
         function loadQuestion() {
             if (currentQuestion < questions.length) {
@@ -252,8 +280,6 @@
             updateLives();
             loadQuestion();
         }
-
-        loadQuestion();
     </script>
 </body>
 </html>
