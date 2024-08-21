@@ -27,7 +27,7 @@
         }
         #startButton {
             position: absolute;
-            bottom: 20px;
+            top: 20px; /* Mover el botón a la parte superior */
             left: 50%;
             transform: translateX(-50%);
             padding: 15px 30px;
@@ -74,7 +74,6 @@
             bottom: 60px;
             left: 40px;
             width: 100px;
-            transition: bottom 0.5s ease-in-out, left 0.5s ease-in-out;
         }
         #cat {
             position: absolute;
@@ -85,13 +84,14 @@
         }
         #stones {
             position: absolute;
-            bottom: 0;
-            left: 100px;
-            width: 600px;
-            height: 100px;
+            bottom: 20px; /* Bajamos las piedras un poco más hacia la parte inferior */
+            left: 180px; /* Ajustamos para centrar mejor las piedras */
+            width: 440px; /* Reducimos el espacio entre las piedras */
+            height: 80px;
             display: flex;
-            justify-content: space-around;
-            align-items: center;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 1;
         }
         .stone {
             width: 60px;
@@ -99,8 +99,29 @@
             background-image: url('img/piedra.webp');
             background-size: cover;
             border-radius: 50%;
-            position: relative;
+            position: absolute;
         }
+        .stone:nth-child(1) {
+            left: 0px;
+            bottom: 10px; /* Bajamos un poco más cada piedra */
+        }
+        .stone:nth-child(2) {
+            left: 90px; /* Acercamos las piedras */
+            bottom: 30px;
+        }
+        .stone:nth-child(3) {
+            left: 180px;
+            bottom: 10px;
+        }
+        .stone:nth-child(4) {
+            left: 270px;
+            bottom: 30px;
+        }
+        .stone:nth-child(5) {
+            left: 360px;
+            bottom: 10px;
+        }
+
         #jumpButton {
             position: absolute;
             bottom: 20px;
@@ -117,6 +138,54 @@
         #jumpButton:disabled {
             background-color: #6c757d;
             cursor: not-allowed;
+        }
+
+        /* Estilos para la ventana modal */
+        #retryModal {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+            justify-content: center;
+            align-items: center;
+        }
+
+        #retryModalContent {
+            background-color: #fff;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out; /* Animación de entrada */
+        }
+
+        #retryModalContent h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        #retryButton {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        #retryButton:hover {
+            background-color: #c82333;
         }
 
         @keyframes bounce {
@@ -144,12 +213,23 @@
             from { opacity: 1; }
             to { opacity: 0.5; }
         }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="gameContainer">
         <div id="lives">❤️❤️❤️</div>
-        <div id="progress">Pregunta 1 de 3</div>
+        <div id="progress">Pregunta 1 de 5</div>
         <div id="questionContainer">
             <div id="question">Pregunta 1: ¿Cuál es la capital de Francia?</div>
             <div class="option" onclick="checkAnswer(0)">Madrid</div>
@@ -163,9 +243,18 @@
             <div class="stone"></div>
             <div class="stone"></div>
             <div class="stone"></div>
+            <div class="stone"></div>
         </div>
         <button id="jumpButton" onclick="jump()">Saltar</button>
         <button id="startButton" onclick="startGame()">Iniciar el Juego</button> <!-- Botón para iniciar el juego -->
+    </div>
+
+    <div id="retryModal">
+        <div id="retryModalContent">
+            <h2>¡Has perdido todas tus vidas!</h2>
+            <p>¿Quieres volver a intentarlo?</p>
+            <button id="retryButton" onclick="resetGame()">Intentar de nuevo</button>
+        </div>
     </div>
 
     <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop></audio> <!-- Aquí añades el sonido de fondo -->
@@ -178,7 +267,9 @@
         const questions = [
             { question: "¿Cuál es la capital de Francia?", options: ["Madrid", "París", "Berlín"], correct: 1 },
             { question: "¿Cuál es la fórmula del agua?", options: ["CO2", "NaCl", "H2O"], correct: 2 },
-            { question: "¿Cuántos planetas hay en el sistema solar?", options: ["8", "9", "10"], correct: 0 }
+            { question: "¿Cuántos planetas hay en el sistema solar?", options: ["8", "9", "10"], correct: 0 },
+            { question: "¿Qué gas respiramos principalmente?", options: ["Oxígeno", "Hidrógeno", "Dióxido de carbono"], correct: 0 },
+            { question: "¿Cuál es el metal más ligero?", options: ["Litio", "Mercurio", "Oro"], correct: 0 }
         ];
 
         function startGame() {
@@ -225,8 +316,7 @@
                 lives--;
                 updateLives();
                 if (lives === 0) {
-                    alert("¡Has perdido todas tus vidas!");
-                    resetGame();
+                    showRetryModal(); // Mostrar ventana modal en lugar de alerta
                 } else {
                     alert("Respuesta incorrecta. Vuelve a intentarlo.");
                 }
@@ -235,19 +325,55 @@
 
         function jump() {
             position++;
-            if (position < 4) {
-                document.getElementById('boy').style.bottom = '140px'; // Salto hacia arriba
+            const stones = document.querySelectorAll('.stone');
+
+            if (position <= stones.length) {
+                const targetStone = stones[position - 1];
+                const stoneLeft = targetStone.offsetLeft;
+                const stoneBottom = targetStone.offsetTop;
+
+                const startX = document.getElementById('boy').offsetLeft;
+                const startY = document.getElementById('gameContainer').offsetHeight - document.getElementById('boy').offsetTop - document.getElementById('boy').offsetHeight;
+                const endX = stoneLeft;
+                const endY = document.getElementById('gameContainer').offsetHeight - stoneBottom - targetStone.offsetHeight;
+
+                animateJump(startX, startY, endX, endY, 500);
+
                 setTimeout(() => {
-                    document.getElementById('boy').style.left = 40 + 200 * position + 'px';
-                    document.getElementById('boy').style.bottom = '60px'; // Vuelve al nivel de las piedras
-                }, 300);
-            } else {
-                alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
-                showVictoryAnimation();
+                    document.getElementById('jumpButton').style.display = 'none'; // Oculta el botón de nuevo hasta la siguiente pregunta correcta
+                    currentQuestion++;
+                    loadQuestion();
+                }, 600);
             }
-            document.getElementById('jumpButton').style.display = 'none'; // Oculta el botón de nuevo hasta la siguiente pregunta correcta
-            currentQuestion++;
-            loadQuestion();
+
+            if (position === stones.length) {
+                // El niño ha llegado al final
+                setTimeout(() => {
+                    alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
+                    showVictoryAnimation();
+                }, 500);
+            }
+        }
+
+        function animateJump(startX, startY, endX, endY, duration) {
+            const element = document.getElementById('boy');
+            const frameRate = 60;
+            const totalFrames = Math.round((duration / 1000) * frameRate);
+            let currentFrame = 0;
+
+            const interval = setInterval(() => {
+                currentFrame++;
+                const progress = currentFrame / totalFrames;
+                const x = startX + (endX - startX) * progress;
+                const y = startY + (endY - startY) * progress - 50 * Math.sin(progress * Math.PI); // Movimiento parabólico
+
+                element.style.left = `${x}px`;
+                element.style.bottom = `${y}px`;
+
+                if (currentFrame >= totalFrames) {
+                    clearInterval(interval);
+                }
+            }, 1000 / frameRate);
         }
 
         function updateLives() {
@@ -262,6 +388,10 @@
             }
         }
 
+        function showRetryModal() {
+            document.getElementById('retryModal').style.display = 'flex'; // Mostrar la ventana modal
+        }
+
         function showVictoryAnimation() {
             document.getElementById('boy').style.left = '660px';
             document.getElementById('boy').style.bottom = '80px';
@@ -272,6 +402,7 @@
         }
 
         function resetGame() {
+            document.getElementById('retryModal').style.display = 'none'; // Oculta la ventana modal
             currentQuestion = 0;
             lives = 3;
             position = 0;
