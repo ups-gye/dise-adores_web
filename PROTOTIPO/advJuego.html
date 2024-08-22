@@ -333,9 +333,9 @@
                 const stoneBottom = targetStone.offsetTop;
 
                 const startX = document.getElementById('boy').offsetLeft;
-                const startY = document.getElementById('gameContainer').offsetHeight - document.getElementById('boy').offsetTop - document.getElementById('boy').offsetHeight;
-                const endX = stoneLeft;
-                const endY = document.getElementById('gameContainer').offsetHeight - stoneBottom - targetStone.offsetHeight;
+                const startY = document.getElementById('boy').offsetTop;
+                const endX = stoneLeft + (targetStone.offsetWidth / 2) - (document.getElementById('boy').offsetWidth / 2);
+                const endY = stoneBottom;
 
                 animateJump(startX, startY, endX, endY, 500);
 
@@ -365,10 +365,10 @@
                 currentFrame++;
                 const progress = currentFrame / totalFrames;
                 const x = startX + (endX - startX) * progress;
-                const y = startY + (endY - startY) * progress - 50 * Math.sin(progress * Math.PI); // Movimiento parabólico
+                const y = startY + (endY - startY) * progress;
 
                 element.style.left = `${x}px`;
-                element.style.bottom = `${y}px`;
+                element.style.top = `${y}px`;
 
                 if (currentFrame >= totalFrames) {
                     clearInterval(interval);
