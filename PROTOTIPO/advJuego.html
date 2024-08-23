@@ -22,12 +22,12 @@
             border: 2px solid #000;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
         }
-        #questionContainer, #boy, #cat, #stones, #lives, #progress, #jumpButton {
+        #questionContainer, #boy, #cat, #stones, #lives, #progress, #moveButton {
             display: none; /* Ocultamos todo hasta que se inicie el juego */
         }
         #startButton {
             position: absolute;
-            top: 20px; /* Mover el botón a la parte superior */
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             padding: 15px 30px;
@@ -74,6 +74,7 @@
             bottom: 60px;
             left: 40px;
             width: 100px;
+            transition: left 0.5s ease-in-out;
         }
         #cat {
             position: absolute;
@@ -84,45 +85,25 @@
         }
         #stones {
             position: absolute;
-            bottom: 20px; /* Bajamos las piedras un poco más hacia la parte inferior */
-            left: 180px; /* Ajustamos para centrar mejor las piedras */
-            width: 440px; /* Reducimos el espacio entre las piedras */
-            height: 80px;
+            bottom: 50px; /* Ajustar la altura de las piedras para que estén más cerca del suelo */
+            left: 160px; /* Ajustar la posición inicial de las piedras */
+            width: 420px; /* Ajustar el ancho para que las piedras estén más juntas */
+            height: 60px; /* Ajustar la altura */
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            justify-content: space-around; /* Espaciar las piedras uniformemente pero cercanas */
+            align-items: center; /* Centrar verticalmente */
             z-index: 1;
         }
+
         .stone {
-            width: 60px;
-            height: 60px;
+            width: 70px; /* Tamaño de las piedras */
+            height: 70px; /* Tamaño de las piedras */
             background-image: url('img/piedra.webp');
             background-size: cover;
             border-radius: 50%;
-            position: absolute;
-        }
-        .stone:nth-child(1) {
-            left: 0px;
-            bottom: 10px; /* Bajamos un poco más cada piedra */
-        }
-        .stone:nth-child(2) {
-            left: 90px; /* Acercamos las piedras */
-            bottom: 30px;
-        }
-        .stone:nth-child(3) {
-            left: 180px;
-            bottom: 10px;
-        }
-        .stone:nth-child(4) {
-            left: 270px;
-            bottom: 30px;
-        }
-        .stone:nth-child(5) {
-            left: 360px;
-            bottom: 10px;
         }
 
-        #jumpButton {
+        #moveButton {
             position: absolute;
             bottom: 20px;
             right: 20px;
@@ -135,7 +116,7 @@
             display: none;
             font-size: 18px;
         }
-        #jumpButton:disabled {
+        #moveButton:disabled {
             background-color: #6c757d;
             cursor: not-allowed;
         }
@@ -189,15 +170,9 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
 
         @keyframes fadeIn {
@@ -215,14 +190,8 @@
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -243,10 +212,9 @@
             <div class="stone"></div>
             <div class="stone"></div>
             <div class="stone"></div>
-            <div class="stone"></div>
         </div>
-        <button id="jumpButton" onclick="jump()">Saltar</button>
-        <button id="startButton" onclick="startGame()">Iniciar el Juego</button> <!-- Botón para iniciar el juego -->
+        <button id="moveButton" onclick="move()">Mover</button>
+        <button id="startButton" onclick="startGame()">Iniciar el Juego</button>
     </div>
 
     <div id="retryModal">
@@ -257,7 +225,7 @@
         </div>
     </div>
 
-    <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop></audio> <!-- Aquí añades el sonido de fondo -->
+    <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop></audio>
 
     <script>
         let currentQuestion = 0;
@@ -269,18 +237,16 @@
             { question: "¿Cuál es la fórmula del agua?", options: ["CO2", "NaCl", "H2O"], correct: 2 },
             { question: "¿Cuántos planetas hay en el sistema solar?", options: ["8", "9", "10"], correct: 0 },
             { question: "¿Qué gas respiramos principalmente?", options: ["Oxígeno", "Hidrógeno", "Dióxido de carbono"], correct: 0 },
-            { question: "¿Cuál es el metal más ligero?", options: ["Litio", "Mercurio", "Oro"], correct: 0 }
+            { question: "¿Cuál es el metal más abundante en la corteza terrestre?", options: ["Hierro", "Aluminio", "Cobre"], correct: 1 }
         ];
 
         function startGame() {
-            // Reproducir música de fondo
             const audio = document.getElementById('backgroundMusic');
             audio.play().catch(error => {
                 console.log("El navegador bloqueó la reproducción automática de audio.");
             });
 
-            // Mostrar todos los elementos del juego
-            document.getElementById('startButton').style.display = 'none'; // Oculta el botón de inicio
+            document.getElementById('startButton').style.display = 'none';
             document.getElementById('questionContainer').style.display = 'block';
             document.getElementById('boy').style.display = 'block';
             document.getElementById('cat').style.display = 'block';
@@ -288,7 +254,6 @@
             document.getElementById('lives').style.display = 'block';
             document.getElementById('progress').style.display = 'block';
 
-            // Cargar la primera pregunta
             loadQuestion();
         }
 
@@ -301,79 +266,82 @@
                     options[i].innerText = q.options[i];
                     options[i].onclick = () => checkAnswer(i);
                 }
-                document.getElementById('jumpButton').style.display = 'none'; // Oculta el botón al cargar una nueva pregunta
+                document.getElementById('moveButton').style.display = 'none';
                 document.getElementById('progress').innerText = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
-            } else {
-                alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
-                showVictoryAnimation();
             }
         }
 
         function checkAnswer(selected) {
             if (selected === questions[currentQuestion].correct) {
-                document.getElementById('jumpButton').style.display = 'block'; // Muestra el botón cuando la respuesta es correcta
+                document.getElementById('moveButton').style.display = 'block';
             } else {
                 lives--;
                 updateLives();
                 if (lives === 0) {
-                    showRetryModal(); // Mostrar ventana modal en lugar de alerta
+                    showRetryModal();
                 } else {
                     alert("Respuesta incorrecta. Vuelve a intentarlo.");
                 }
             }
         }
 
-        function jump() {
-            position++;
+        function move() {
             const stones = document.querySelectorAll('.stone');
 
-            if (position <= stones.length) {
-                const targetStone = stones[position - 1];
-                const stoneLeft = targetStone.offsetLeft;
-                const stoneBottom = targetStone.offsetTop;
+            if (position < stones.length) {
+                const targetStone = stones[position];
+                const currentLeft = parseInt(window.getComputedStyle(document.getElementById('boy')).left, 10);
+                const targetLeft = targetStone.offsetLeft;
 
-                const startX = document.getElementById('boy').offsetLeft;
-                const startY = document.getElementById('boy').offsetTop;
-                const endX = stoneLeft + (targetStone.offsetWidth / 2) - (document.getElementById('boy').offsetWidth / 2);
-                const endY = stoneBottom;
-
-                animateJump(startX, startY, endX, endY, 500);
+                animateMove(currentLeft, targetLeft, 500);
 
                 setTimeout(() => {
-                    document.getElementById('jumpButton').style.display = 'none'; // Oculta el botón de nuevo hasta la siguiente pregunta correcta
+                    position++;
+                    document.getElementById('moveButton').style.display = 'none';
                     currentQuestion++;
-                    loadQuestion();
+                    if (currentQuestion < questions.length) {
+                        loadQuestion();
+                    } else {
+                        moveToCat();
+                    }
                 }, 600);
-            }
-
-            if (position === stones.length) {
-                // El niño ha llegado al final
-                setTimeout(() => {
-                    alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
-                    showVictoryAnimation();
-                }, 500);
+            } else if (position === stones.length) {
+                moveToCat();
             }
         }
 
-        function animateJump(startX, startY, endX, endY, duration) {
+        function moveToCat() {
+            const boy = document.getElementById('boy');
+            const cat = document.getElementById('cat');
+            const catLeft = cat.offsetLeft - 100; // Mover al niño a la izquierda del gato
+
+            animateMove(parseInt(window.getComputedStyle(boy).left, 10), catLeft, 800);
+
+            setTimeout(() => {
+                alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
+                showVictoryAnimation();
+            }, 900);
+        }
+
+        function animateMove(startX, endX, duration) {
             const element = document.getElementById('boy');
-            const frameRate = 60;
-            const totalFrames = Math.round((duration / 1000) * frameRate);
+            const frameRate = 60; // Número de fotogramas por segundo
+            const totalFrames = Math.round((duration / 1000) * frameRate); // Número total de fotogramas para la duración especificada
             let currentFrame = 0;
+
+            const distance = endX - startX;
+            const step = distance / totalFrames;
 
             const interval = setInterval(() => {
                 currentFrame++;
-                const progress = currentFrame / totalFrames;
-                const x = startX + (endX - startX) * progress;
-                const y = startY + (endY - startY) * progress;
-
-                element.style.left = `${x}px`;
-                element.style.top = `${y}px`;
+                const newLeft = startX + step * currentFrame;
+                element.style.left = `${newLeft}px`;
 
                 if (currentFrame >= totalFrames) {
-                    clearInterval(interval);
+                    clearInterval(interval); // Detener la animación cuando se complete
+                    element.style.left = `${endX}px`; // Asegurarse de que el niño termine en la posición correcta
                 }
-            }, 1000 / frameRate);
+            }, 1000 / frameRate); // Intervalo para cada fotograma basado en la tasa de fotogramas
         }
 
         function updateLives() {
@@ -389,12 +357,12 @@
         }
 
         function showRetryModal() {
-            document.getElementById('retryModal').style.display = 'flex'; // Mostrar la ventana modal
+            document.getElementById('retryModal').style.display = 'flex';
         }
 
         function showVictoryAnimation() {
-            document.getElementById('boy').style.left = '660px';
-            document.getElementById('boy').style.bottom = '80px';
+            const boy = document.getElementById('boy');
+            boy.style.left = '660px';
             setTimeout(() => {
                 alert("¡Felicidades! ¡Has ganado el juego!");
                 resetGame();
@@ -402,7 +370,7 @@
         }
 
         function resetGame() {
-            document.getElementById('retryModal').style.display = 'none'; // Oculta la ventana modal
+            document.getElementById('retryModal').style.display = 'none';
             currentQuestion = 0;
             lives = 3;
             position = 0;
