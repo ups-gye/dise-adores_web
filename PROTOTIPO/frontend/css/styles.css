@@ -1,0 +1,215 @@
+body {
+    font-family: 'Comic Sans MS', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+#gameContainer {
+    background-image: url('../img/fond.jpg');
+    background-size: cover;
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    position: relative;
+    border: 2px solid #000;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+#questionContainer, #boy, #cat, #stones, #lives, #progress, #jumpButton {
+    display: none; /* Ocultamos todo hasta que se inicie el juego */
+}
+#startButton {
+    position: absolute;
+    top: 20px; /* Mover el botón a la parte superior */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+#startButton:hover {
+    background-color: #218838;
+}
+.option {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.option:hover {
+    background-color: #0056b3;
+}
+#lives {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+}
+#medidor-energia-container {
+    position: absolute;
+    top: 60px; /* Debajo de las vidas */
+    left: 10px;
+    width: 100px;
+    height: 20px;
+    background-color: grey; /* Fondo del contenedor del medidor */
+    border-radius: 5px;
+    overflow: hidden;
+}
+#medidor-energia {
+    width: 100%; /* Comienza lleno */
+    height: 100%;
+    background-color: rgb(252, 0, 0); /* Color del medidor de energía */
+    transition: width 0.5s; /* Suaviza la reducción o aumento del medidor */
+    border-color: #000;
+}
+#progress {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    color: #333;
+}
+#boy {
+    position: absolute;
+    bottom: 60px;
+    left: 40px;
+    width: 100px;
+}
+#cat {
+    position: absolute;
+    bottom: 80px;
+    right: 100px;
+    width: 100px;
+    animation: bounce 2s infinite;
+}
+#stones {
+    position: absolute;
+    bottom: 20px; /* Bajamos las piedras un poco más hacia la parte inferior */
+    left: 180px; /* Ajustamos para centrar mejor las piedras */
+    width: 440px; /* Reducimos el espacio entre las piedras */
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 1;
+}
+.stone {
+    width: 60px;
+    height: 60px;
+    background-image: url('../img/piedra.webp');
+    background-size: cover;
+    border-radius: 50%;
+    position: absolute;
+}
+.stone:nth-child(1) {
+    left: 0px;
+    bottom: 10px; /* Bajamos un poco más cada piedra */
+}
+.stone:nth-child(2) {
+    left: 90px; /* Acercamos las piedras */
+    bottom: 30px;
+}
+.stone:nth-child(3) {
+    left: 180px;
+    bottom: 10px;
+}
+.stone:nth-child(4) {
+    left: 270px;
+    bottom: 30px;
+}
+.stone:nth-child(5) {
+    left: 360px;
+    bottom: 10px;
+}
+#jumpButton {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+    font-size: 18px;
+}
+#jumpButton:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+/* Estilos para la ventana modal */
+#retryModal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+    justify-content: center;
+    align-items: center;
+}
+#retryModalContent {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.5s ease-out; /* Animación de entrada */
+}
+#retryModalContent h2 {
+    font-size: 24px;
+    color: #333;
+}
+#retryButton {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+#retryButton:hover {
+    background-color: #c82333;
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.lives-animation {
+    animation: blink 0.3s alternate infinite;
+}
+@keyframes blink {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+}
