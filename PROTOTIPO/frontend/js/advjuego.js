@@ -157,8 +157,6 @@ function animateJump(startX, endX, duration) {
     }, 1000 / frameRate);
 }
 
-
-
 function updateLives() {
     const livesContainer = document.getElementById('lives');
     livesContainer.innerHTML = '';
