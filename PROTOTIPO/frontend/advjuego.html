@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡SALTOS DE CIENCIAS!</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/advjuego.css"> <!-- Enlace al archivo CSS -->
 </head>
 <body>
     <div id="gameContainer">
@@ -23,9 +23,8 @@
             <div class="stone"></div>
             <div class="stone"></div>
             <div class="stone"></div>
-            <div class="stone"></div>
         </div>
-        <button id="jumpButton" onclick="jump()">Saltar</button>
+        <button id="moveButton" onclick="saltar()">Mover</button>
         <button id="startButton" onclick="startGame()">Iniciar el Juego</button>
     </div>
 
@@ -38,6 +37,7 @@
     </div>
 
     <audio id="backgroundMusic" src="audio/angry-birds-videojuegos-.mp3" loop></audio>
-    <script src="js/scripts.js"></script>
+
+    <script src="js/advjuego.js"></script> <!-- Enlace al archivo JavaScript -->
 </body>
 </html>
