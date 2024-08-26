@@ -1,6 +1,5 @@
 const express = require('express')
 const body_parser = require('body-parser')
-const helmet = require('helmet')
 const path = require('path');
 const config = require('./config')
 const routes = require('./network/routes')
@@ -22,10 +21,12 @@ app.use((req, res, next) => {
     );
     next();
   }); 
-  
-  
+
 app.use( body_parser.json() )
 app.use( body_parser.urlencoded({extended:false}) )
+
+app.use(express.static(path.join(__dirname)));
+
 
 app.use(express.static(path.join(__dirname,'..', 'frontend')));
 
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname,'..', 'frontend')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'..', 'frontend', 'datosprincipales.html'));
 });
+
 
 routes( app )
 
