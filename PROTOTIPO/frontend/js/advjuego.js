@@ -1,8 +1,8 @@
 let currentQuestion = 0;
 let lives = 3;
 let position = 0;
+let score = 0; // Inicializar la puntuación en 0
 const stonePositions = [160, 260, 360, 460]; // Posiciones left de cada piedra en píxeles
-
 
 const questions = [
     { question: "¿Cuál es la capital de Francia?", options: ["Madrid", "París", "Berlín"], correct: 1 },
@@ -49,12 +49,12 @@ function loadQuestion() {
 
 function checkAnswer(selected) {
     if (selected === questions[currentQuestion].correct) {
+        score += 20; // Sumar 20 puntos por cada respuesta correcta
+        document.getElementById('score').innerText = `Puntos: ${score}`; // Mostrar la puntuación actualizada
         document.getElementById('moveButton').style.display = 'block';
-        if (currentQuestion === questions.length - 1) {
-            // Si es la última pregunta, cambiar el texto del botón
-            document.getElementById('moveButton').innerText = 'Ir al gato';
-        }
     } else {
+        score -= 20; // Restar 20 puntos por cada respuesta incorrecta
+        document.getElementById('score').innerText = `Puntos: ${score}`; // Mostrar la puntuación actualizada
         lives--;
         updateLives();
         if (lives === 0) {
@@ -64,6 +64,7 @@ function checkAnswer(selected) {
         }
     }
 }
+
 function saltar() {
     const stones = document.querySelectorAll('.stone');
     const boy = document.getElementById('boy');
@@ -123,7 +124,6 @@ function moveToCat() {
     }, 900);
 }
 
-
 function animateJump(startX, endX, duration) {
     const element = document.getElementById('boy');
     const startY = parseInt(window.getComputedStyle(element).bottom, 10); // Posición inicial en Y (bottom)
@@ -157,8 +157,6 @@ function animateJump(startX, endX, duration) {
     }, 1000 / frameRate);
 }
 
-
-
 function updateLives() {
     const livesContainer = document.getElementById('lives');
     livesContainer.innerHTML = '';
@@ -189,8 +187,10 @@ function resetGame() {
     currentQuestion = 0;
     lives = 3;
     position = 0;
+    score = 0; // Restablecer la puntuación a 0 al reiniciar el juego
     document.getElementById('boy').style.left = '40px';
     document.getElementById('boy').style.bottom = '60px';
+    document.getElementById('score').innerText = `Puntos: ${score}`; // Restablecer la visualización de la puntuación
     updateLives();
     loadQuestion();
 }
