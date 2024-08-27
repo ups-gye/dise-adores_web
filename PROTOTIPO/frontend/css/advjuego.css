@@ -1,4 +1,109 @@
 body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    height: 50px;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.main-nav ul li {
+    display: inline;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.main-nav ul li a:hover {
+    background-color: #45a049;
+}
+
+.menu-toggle {
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.welcome-section {
+    padding: 40px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.welcome-section h1 {
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.welcome-section p {
+    color: #555;
+    line-height: 1.6;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+
+.game-container img {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+}
+
+.game-footer {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.Ims img {
+    display: block;
+    margin: auto; /* Centra la imagen */
+    width: 50%; /* Ajusta el porcentaje según tus necesidades */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+.game-container h1 {
+    text-align: center;
+    font-family: 'Times New Roman', serif; /* Fuente  */
+    color: #0c0c0c; /* Color blanco para visibilidad */
+    font-size: 35px; /* Tamaño grande */
+    text-shadow: 2px 2px #e2e1e1; /* Sombra para profundidad */
+}
+
+body {
     font-family: 'Comic Sans MS', sans-serif;
     margin: 0;
     padding: 0;
@@ -15,8 +120,13 @@ body {
     border: 2px solid #000;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
 }
-#questionContainer, #boy, #cat, #stones, #lives, #progress, #moveButton {
+#boy, #cat, #stones, #lives, #progress, #moveButton {
     display: none;
+}
+#questionContainer{
+    display: none;
+    background-color:rgba(79, 199, 85, 0.315);
+    
 }
 #startButton {
     position: absolute;
@@ -36,14 +146,12 @@ body {
 #startButton:hover {
     background-color: #218838;
 }
-.option {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    margin: 10px;
+.options {
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
     border-radius: 5px;
-    cursor: pointer;
+    cursor:pointer;
     transition: background-color 0.3s ease;
 }
 .option:hover {
@@ -54,6 +162,7 @@ body {
     top: 10px;
     left: 10px;
     font-size: 24px;
+    background-color: rgba(0, 255, 13, 0.178);
 }
 #progress {
     position: absolute;
@@ -115,6 +224,78 @@ body {
     cursor: not-allowed;
 }
 
+.feedback {
+    display: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.feedback.correct {
+    display: block;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.feedback.incorrect {
+    display: block;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Estilos para la ventana modal de victoria */
+#victoryModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+#victoryModalContent {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.5s ease-out;
+}
+
+#victoryModalContent h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+#playAgainButton ,#exitButton{
+    background-color: #5be00d;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+#retryButton:hover {
+    background-color: #40df0f;
+}
+
 /* Estilos para la ventana modal */
 #retryModal {
     display: none;
@@ -133,9 +314,9 @@ body {
 #retryModalContent {
     background-color: #fff;
     margin: auto;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #888;
-    width: 300px;
+    width: 200px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
@@ -168,10 +349,19 @@ body {
     40% { transform: translateY(-10px); }
     60% { transform: translateY(-5px); }
 }
+.feedback{
+    animation: fadeIn 0.5s ease-in;
+}
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+     }
 }
 
 .lives-animation {

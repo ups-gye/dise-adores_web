@@ -1,24 +1,18 @@
-let currentQuestion = 0;
+let currentQuestionIndex = 0;
 let lives = 3;
 let position = 0;
-let score = 0; // Inicializar la puntuación en 0
-const stonePositions = [160, 260, 360, 460]; // Posiciones left de cada piedra en píxeles
+let score = 0;
+let questions = [];
+const stonePositions = [160, 260, 360, 460];
 
-const questions = [
-    { question: "¿Cuál es la capital de Francia?", options: ["Madrid", "París", "Berlín"], correct: 1 },
-    { question: "¿Cuál es la fórmula del agua?", options: ["CO2", "NaCl", "H2O"], correct: 2 },
-    { question: "¿Cuántos planetas hay en el sistema solar?", options: ["8", "9", "10"], correct: 0 },
-    { question: "¿Qué gas respiramos principalmente?", options: ["Oxígeno", "Hidrógeno", "Dióxido de carbono"], correct: 0 },
-    { question: "¿Cuál es el metal más abundante en la corteza terrestre?", options: ["Hierro", "Aluminio", "Cobre"], correct: 1 }
-];
-
-function startGame() {
+async function startGame() {
     const boy = document.getElementById('boy');
     boy.style.left = '40px';
     boy.style.bottom = '60px';
     boy.style.zIndex = '10';
     const audio = document.getElementById('backgroundMusic');
-    audio.play().catch(error => {
+    audio.play()
+    .catch(error => {
         console.log("El navegador bloqueó la reproducción automática de audio.");
     });
 
@@ -29,43 +23,92 @@ function startGame() {
     document.getElementById('stones').style.display = 'flex';
     document.getElementById('lives').style.display = 'block';
     document.getElementById('progress').style.display = 'block';
+    document.getElementById('score').style.display = 'block';
 
-    loadQuestion();
+    await fetchQuestions();
+    displayQuestion();
 }
 
-function loadQuestion() {
-    if (currentQuestion < questions.length) {
-        const q = questions[currentQuestion];
-        document.getElementById('question').innerText = q.question;
-        const options = document.querySelectorAll('.option');
-        for (let i = 0; i < options.length; i++) {
-            options[i].innerText = q.options[i];
-            options[i].onclick = () => checkAnswer(i);
-        }
-        document.getElementById('moveButton').style.display = 'none'; // Desactivar el botón de mover inicialmente
-        document.getElementById('progress').innerText = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+async function fetchQuestions() {
+    try {
+        const response = await fetch('/preguntas');
+        questions = await response.json();
+    } catch (error) {
+        console.error('Error fetching questions:', error);
     }
 }
 
-function checkAnswer(selected) {
-    if (selected === questions[currentQuestion].correct) {
-        score += 20; // Sumar 20 puntos por cada respuesta correcta
-        document.getElementById('score').innerText = `Puntos: ${score}`; // Mostrar la puntuación actualizada
-        document.getElementById('moveButton').style.display = 'block';
+function displayQuestion() {
+    const questionContainer = document.getElementById('questionContainer');
+    if (currentQuestionIndex < questions.length) {
+        const question = questions[currentQuestionIndex];
+        
+        let optionsHtml = question.options.map(option => `
+            <label>
+                <input type="radio" name="answer" value="${option.option}" onclick="checkAnswer('${option.option}')">
+                ${option.option}. ${option.text || 'Opción sin texto'}
+            </label>
+        `).join('');
+
+        questionContainer.innerHTML = `
+            <h2>${question.question}</h2>
+            <div class="options">
+                ${optionsHtml}
+            </div>
+        `;
+
+        document.getElementById('moveButton').style.display = 'none';
+        document.getElementById('progress').innerText = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
+        document.getElementById('feedback').innerText = '';
     } else {
-        score -= 20; // Restar 20 puntos por cada respuesta incorrecta
-        document.getElementById('score').innerText = `Puntos: ${score}`; // Mostrar la puntuación actualizada
+        questionContainer.innerHTML = '<h2>¡Has completado todas las preguntas!</h2>';
+    }
+}
+
+function checkAnswer(selectedOption) {
+    const feedbackElement = document.getElementById('feedback');
+    const correctAnswer = questions[currentQuestionIndex].answer;
+
+    if (selectedOption === correctAnswer) {
+        score += 20;
+        feedbackElement.innerHTML = '<i class="fas fa-check-circle"></i> ¡Respuesta correcta!';
+        feedbackElement.classList.add('correct');
+        document.getElementById('score').innerText = `Puntos: ${score}`;
+        document.getElementById('moveButton').style.display = 'block';
+        
+    } else {
+        score -= 20;
+        feedbackElement.innerHTML = '<i class="fas fa-times-circle"></i> Respuesta incorrecta. Inténtalo de nuevo.';
+        feedbackElement.classList.add('incorrect');
+        //feedbackElement.innerText = 'Respuesta incorrecta. Inténtalo de nuevo.';
+        document.getElementById('score').innerText = `Puntos: ${score}`;
         lives--;
         updateLives();
+        setTimeout(() => {
+            feedbackElement.classList.remove('incorrect');
+            feedbackElement.innerHTML = ''; // Opcional: limpiar el contenido después de ocultarlo
+        }, 1000);
         if (lives === 0) {
             showRetryModal();
-        } else {
-            alert("Respuesta incorrecta. Vuelve a intentarlo.");
         }
     }
 }
 
+
+
+// Las funciones saltar(), moveToCat(), animateJump(), updateLives(), 
+// showR
+
+
+// Las funciones saltar(), moveToCat(), animateJump(), updateLives(), 
+// showRetryModal(), showVictoryAnimation(), y resetGame() permanecen sin cambios
+
 function saltar() {
+    const feedbackElement = document.querySelector('.feedback');
+    if (feedbackElement) {
+        feedbackElement.classList.remove('correct');
+        feedbackElement.classList.remove('incorrect'); // Oculta el feedback
+    }
     const stones = document.querySelectorAll('.stone');
     const boy = document.getElementById('boy');
 
@@ -75,7 +118,7 @@ function saltar() {
         const stoneWidth = targetStone.offsetWidth;
 
         // Calcular la posición frontal de la piedra
-        const frontPosition = targetLeft + (stoneWidth * 0.1); // Ajusta este valor según necesites
+        const frontPosition = targetLeft + (stoneWidth * 0.0); // Ajusta este valor según necesites
 
         // Realizar el salto
         boy.style.transition = 'left 0.5s ease-in-out, bottom 0.25s ease-in-out';
@@ -91,9 +134,10 @@ function saltar() {
         setTimeout(() => {
             position++;
             document.getElementById('moveButton').style.display = 'none';
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                loadQuestion();
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length ) {
+                displayQuestion(); //
+                
             } else {
                 moveToCat();
             }
@@ -177,14 +221,20 @@ function showVictoryAnimation() {
     const boy = document.getElementById('boy');
     boy.style.left = '660px';
     setTimeout(() => {
-        alert("¡Felicidades! ¡Has ganado el juego!");
-        resetGame();
+        // Mostrar el modal de victoria
+        document.getElementById('victoryModal').style.display = 'flex';
     }, 1000);
 }
 
 function resetGame() {
+    const feedbackElement = document.querySelector('.feedback');
+    if (feedbackElement) {
+        feedbackElement.classList.remove('correct');
+        feedbackElement.classList.remove('incorrect'); // Oculta el feedback
+    }
     document.getElementById('retryModal').style.display = 'none';
-    currentQuestion = 0;
+    document.getElementById('victoryModal').style.display = 'none';
+    currentQuestionIndex = 0;
     lives = 3;
     position = 0;
     score = 0; // Restablecer la puntuación a 0 al reiniciar el juego
@@ -192,5 +242,10 @@ function resetGame() {
     document.getElementById('boy').style.bottom = '60px';
     document.getElementById('score').innerText = `Puntos: ${score}`; // Restablecer la visualización de la puntuación
     updateLives();
-    loadQuestion();
+    displayQuestion();
+    
+}
+function exitGame() {
+    // Aquí puedes redirigir a otra página o realizar otras acciones para salir del juego
+    window.location.href = 'datosP.html'; // Ejemplo: redirigir a la página principal
 }

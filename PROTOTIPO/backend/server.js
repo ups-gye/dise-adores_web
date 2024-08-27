@@ -25,16 +25,18 @@ app.use((req, res, next) => {
 app.use( body_parser.json() )
 app.use( body_parser.urlencoded({extended:false}) )
 
-app.use(express.static(path.join(__dirname)));
-
+//app.use(express.static(path.join(__dirname)));
 
 app.use(express.static(path.join(__dirname,'..', 'frontend')));
 
 // Ruta para el index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname,'..', 'frontend', 'datosprincipales.html'));
+    res.sendFile(path.join(__dirname,'..', 'frontend', 'advjuego.html'));
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname,'..', 'frontend', 'datosp.html'));
+});
 
 routes( app )
 
