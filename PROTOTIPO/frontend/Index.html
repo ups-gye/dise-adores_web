@@ -2,82 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>SALTO_CIENCIA</title>
-    <link rel="stylesheet" href="css/Datos.css">
-    <!-- Bootstrap CSS -->
-    <link rel="icon" href="data:,">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>SALTOS_CIENCIA</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body background="img/PROF.avif">
+<body background="img/1.webp">
     <header class="main-header">
-        <img src="img/UPS.webp" alt="img" class="logo">
+        <img src="img/UPS.webp" alt="123" class="logo">
         <nav class="main-nav">
             <ul>
-                <li><a href="#">BIENVENIDO A SALTOS DE CIENCIA, INGRESE SUS DATOS:</a></li>
+                <li><a href="datosp.html">SALTOS DE CIENCIA</a></li>
+                <li><a href="Video.html">VIDEO</a></li>
+                <li><a href="Tabla.html">LEADERBOARD</a></li>
+
             </ul>
         </nav>
     </header>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="form-container">
-                    <h2>INGRESA TUS DATOS:</h2>
-                    <form id="insertar-usuario">
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" placeholder="Nombre" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="apellido">Apellido:</label>
-                            <input type="text" id="apellido" placeholder="Apellido" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="curso">Curso:</label>
-                            <input type="text" id="curso" placeholder="Curso" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="paralelo">Paralelo:</label>
-                            <input type="text" id="paralelo" placeholder="Paralelo" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">ENVIAR</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="js/Datos.js"></script>
-    <!-- Bootstrap JS y jQuery (necesario para el modal) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <section class="welcome-section">
+        <h1>¡Bienvenido a SALTOS DE CIENCIA!</h1>
+        <p>En esta plataforma podrás visualizar videos y jugar de manera educativa, de esta forma reforzarás tus conocimientos y responsabilidades como estudiante.</p>
+        <p>Se desarrolló un juego dirigido a los estudiantes, en el cual tendrás que responder correctamente preguntas sobre el video que se te dejara en la siguiente descripcion (<a href="Video.html">VIDEO</a>) . Queremos motivar tu competitividad, por lo cual también creamos una Leaderboard por cada curso (es decir, "5to" y "4to" con todos sus paralelos) con el objetivo de obtener un podio en cada parcial y que se tome en cuenta como puntos extra o méritos para el docente y su calificación final. Espero que te guste!!</p>
+        <p>¡Mucha Suerte! 💪</p>
+    </section>
 
-    <!-- Modal de Bootstrap -->
-    <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="success-modal-label" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="success-modal-label">¡Datos enviados correctamente!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Tus datos han sido enviados correctamente.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="redirectToDashboard()">Continuar </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function redirectToDashboard() {
-            // Redirigir a otra página después de cerrar el modal
-            window.location.href = "bienvenida.html"; 
-        }
-    </script>
 </body>
 </html>
