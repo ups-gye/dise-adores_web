@@ -14,6 +14,8 @@ app.use((req, res, next) => {
     next();
   });
 
+  app.use('/audio', express.static('../audio/angry-birds-videojuegos-.mp3'));
+
   app.use((req, res, next) => {
     res.setHeader(
       'Content-Security-Policy',
