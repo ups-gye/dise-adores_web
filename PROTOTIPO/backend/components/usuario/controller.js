@@ -10,7 +10,18 @@ function insertar_usuario( dato ) {
     } )
 }
 
+function obtener_usuario( dato ) {
+    return new Promise( (resolve, reject) => {
+        if (!dato) {
+            reject( 'No existen datos' )
+        } else {
+            resolve( storage.obtener( dato ) )
+        }
+    } )
+}
+
 
 module.exports = {
-    insertar_usuario
+    insertar_usuario,
+    obtener_usuario
 }
