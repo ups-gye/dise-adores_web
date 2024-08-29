@@ -40,6 +40,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname,'..', 'frontend', 'datosp.html'));
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname,'..', 'frontend', 'Tabla.html'));
+});
+
 routes( app )
 
 app.listen( config.PORT )
