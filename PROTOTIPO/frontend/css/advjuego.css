@@ -248,6 +248,11 @@ body {
     border: 1px solid #f5c6cb;
 }
 
+.answer.selected {
+    background-color: #f0f0f0;
+    border: 2px solid #007bff;
+}
+
 /* Estilos para la ventana modal de victoria */
 #victoryModal {
     display: none;

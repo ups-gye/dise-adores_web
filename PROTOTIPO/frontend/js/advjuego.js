@@ -4,6 +4,7 @@ let position = 0;
 let score = 0;
 let questions = [];
 const stonePositions = [160, 260, 360, 460];
+let selectedAnswerIndex = -1;
 
 async function startGame() {
     const boy = document.getElementById('boy');
@@ -43,8 +44,8 @@ function displayQuestion() {
     if (currentQuestionIndex < questions.length) {
         const question = questions[currentQuestionIndex];
         
-        let optionsHtml = question.options.map(option => `
-            <label>
+        let optionsHtml = question.options.map((option, index) => `
+            <label class="answer" data-index="${index}">
                 <input type="radio" name="answer" value="${option.option}" onclick="checkAnswer('${option.option}')">
                 ${option.option}. ${option.text || 'Opción sin texto'}
             </label>
@@ -60,6 +61,10 @@ function displayQuestion() {
         document.getElementById('moveButton').style.display = 'none';
         document.getElementById('progress').innerText = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
         document.getElementById('feedback').innerText = '';
+        
+        // Reiniciar la selección
+        selectedAnswerIndex = -1;
+        highlightAnswer();
     } else {
         questionContainer.innerHTML = '<h2>¡Has completado todas las preguntas!</h2>';
     }
@@ -93,15 +98,6 @@ function checkAnswer(selectedOption) {
         }
     }
 }
-
-
-
-// Las funciones saltar(), moveToCat(), animateJump(), updateLives(), 
-// showR
-
-
-// Las funciones saltar(), moveToCat(), animateJump(), updateLives(), 
-// showRetryModal(), showVictoryAnimation(), y resetGame() permanecen sin cambios
 
 function saltar() {
     const feedbackElement = document.querySelector('.feedback');
@@ -226,6 +222,54 @@ function showVictoryAnimation() {
     }, 1000);
 }
 
+document.addEventListener('keydown', function(event) {
+    const answers = document.querySelectorAll('.answer');
+    
+    switch(event.key) {
+        case 'ArrowUp':
+            event.preventDefault();
+            if (selectedAnswerIndex > 0) {
+                selectedAnswerIndex--;
+                highlightAnswer();
+            }
+            break;
+        case 'ArrowDown':
+            event.preventDefault();
+            if (selectedAnswerIndex < answers.length - 1) {
+                selectedAnswerIndex++;
+                highlightAnswer();
+            }
+            break;
+        case 'Enter':
+            event.preventDefault();
+            if (selectedAnswerIndex !== -1) {
+                const selectedInput = answers[selectedAnswerIndex].querySelector('input');
+                if (selectedInput) {
+                    selectedInput.click();
+                }
+            }
+            break;
+        case ' ':
+            event.preventDefault();
+            const moveButton = document.getElementById('moveButton');
+            if (moveButton.style.display !== 'none') {
+                saltar();
+            }
+            break;
+    }
+});
+
+function highlightAnswer() {
+    const answers = document.querySelectorAll('.answer');
+    answers.forEach((answer, index) => {
+        if (index === selectedAnswerIndex) {
+            answer.classList.add('selected');
+        } else {
+            answer.classList.remove('selected');
+        }
+    });
+}
+
 function resetGame() {
     const feedbackElement = document.querySelector('.feedback');
     if (feedbackElement) {
@@ -235,6 +279,7 @@ function resetGame() {
     document.getElementById('retryModal').style.display = 'none';
     document.getElementById('victoryModal').style.display = 'none';
     currentQuestionIndex = 0;
+    selectedAnswerIndex = -1;
     lives = 3;
     position = 0;
     score = 0; // Restablecer la puntuación a 0 al reiniciar el juego
@@ -246,6 +291,7 @@ function resetGame() {
     
 }
 function exitGame() {
+    localStorage.setItem('score', score);
     // Aquí puedes redirigir a otra página o realizar otras acciones para salir del juego
-    window.location.href = 'datosP.html'; // Ejemplo: redirigir a la página principal
+    window.location.href = 'Tabla.html'; // Ejemplo: redirigir a la página principal
 }
