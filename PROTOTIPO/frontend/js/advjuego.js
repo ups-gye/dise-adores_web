@@ -1,3 +1,4 @@
+//agregando funcion teclas
 let currentQuestionIndex = 0;
 let lives = 3;
 let position = 0;
