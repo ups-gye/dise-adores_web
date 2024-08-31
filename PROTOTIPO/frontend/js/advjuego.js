@@ -160,7 +160,7 @@ function moveToCat() {
     }, 400);
 
     setTimeout(() => {
-        alert("¡Felicidades, cruzaste el río y te reencontraste con el gato!");
+        
         showVictoryAnimation();
     }, 900);
 }
